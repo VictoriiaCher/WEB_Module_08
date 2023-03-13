@@ -1,0 +1,18 @@
+[tool.poetry]
+name = "web-module-08"
+version = "0.1.0"
+description = ""
+authors = ["VictoriiaCher <cherevchenko.victoriy@gmail.com>"]
+readme = "README.md"
+packages = [{include = "web_module_08"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pymongo = "^4.3.3"
+mongoengine = "^0.27.0"
+quote = "^2.0.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
