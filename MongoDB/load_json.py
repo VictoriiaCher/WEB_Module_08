@@ -15,9 +15,9 @@ for field in collection:
 authors = Author.objects()
 
 with open("src/quotes.json", "r", encoding="utf-8") as f:
-    qoutes = json.load(f)
+    collection = json.load(f)
 
-    for quote in qoutes:
+    for quote in collection:
         quotes_obj = Quote.objects(quote=quote['quote'])
         if quotes_obj:
             break
