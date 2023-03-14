@@ -1,8 +1,13 @@
+import redis
+from redis_lru import RedisLRU
+
 from pprint import pprint
 
 from src.models import Quote
 import connect
 
+client = redis.StrictRedis(host="localhost", port=6379, password=None)
+cache = RedisLRU(client)
 
 
 def input_error(func):
@@ -11,13 +16,13 @@ def input_error(func):
             return func(user_data)
         except KeyError:
             return f'Wrong command or input data'
+
     return wrapper
 
 
 @input_error
 def handler(command: str):
     return COMMAND[command]
-
 
 
 def main():
@@ -34,6 +39,7 @@ def handle_user_input(user_input: str) -> tuple:
     return command, user_data
 
 
+@cache
 def find_to_name(name: list):  # name:Albert Einstein
     name = name[0].strip()
     quotes = Quote.objects()
@@ -45,6 +51,7 @@ def find_to_name(name: list):  # name:Albert Einstein
     return pprint(quote_list)
 
 
+@cache
 def find_to_tag(tag: list):
     result = Quote.objects(tags=tag[0])
 
@@ -52,7 +59,8 @@ def find_to_tag(tag: list):
         print(quote.quote)
 
 
-def find_to_tags(tags: list):  #tags:live,life
+@cache
+def find_to_tags(tags: list):  # tags:live,life
     tags = tags[0].split(",")
     result = Quote.objects(tags__in=tags)
 
@@ -61,7 +69,7 @@ def find_to_tags(tags: list):  #tags:live,life
 
 
 @input_error
-def bye():
+def bye(*args):
     print("Goodbye!")
     return exit()
 
